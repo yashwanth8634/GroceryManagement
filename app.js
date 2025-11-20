@@ -43,6 +43,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.render('login', { error: null }));
 app.get('/register', (req, res) => res.render('register', { error: null }));
 
+// Health Check Route for UptimeRobot
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Dashboard
 app.get('/dashboard', protect, async (req, res) => {
   try {
