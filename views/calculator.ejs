@@ -1,57 +1,97 @@
 <%- include('partials/_header', { title: 'Calculator', user: user }) %>
 
+<style>
+    /* Hide ugly browser spin buttons */
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+</style>
+
 <div class="max-w-xl mx-auto animate-slide-up">
     
-    <div class="bg-gradient-to-br from-gray-900 to-black p-6 rounded-3xl border border-border shadow-2xl mb-6 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl rounded-full pointer-events-none"></div>
-
-        <label class="block text-gray-500 text-sm font-medium mb-2 uppercase tracking-wider">Current Item</label>
+    <div class="bg-[#0a0a0a] p-6 rounded-3xl border border-[#1f1f1f] shadow-2xl mb-4 relative overflow-hidden">
+        <label class="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">Current Item</label>
         
-        <select id="itemSelector" class="w-full bg-transparent text-3xl font-bold text-white focus:outline-none cursor-pointer appearance-none">
-            <option value="" data-sell="0">Select Item...</option>
+        <select id="itemSelector" class="w-full bg-transparent text-3xl font-bold text-white focus:outline-none cursor-pointer appearance-none mb-4">
+            <option value="" data-sell="0" data-buy="0">Select Item...</option>
             <% items.forEach(item => { %>
                 <option 
                     value="<%= item._id %>" 
                     data-sell="<%= item.sellPricePerKg %>"
+                    data-buy="<%= item.buyPricePerKg %>"
                 >
                     <%= item.name %>
                 </option>
             <% }) %>
         </select>
         
-        <div class="mt-2 flex items-center text-secondary font-mono">
-            <span>Rate: ₹</span><span id="rateDisplay">0</span><span>/kg</span>
+        <div class="flex items-center gap-8 border-t border-[#1f1f1f] pt-4">
+            
+            <div>
+                <p class="text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">Selling Rate</p>
+                <div class="text-secondary font-mono text-xl font-bold">
+                    ₹<span id="rateDisplay">0</span><span class="text-sm font-normal text-gray-500">/kg</span>
+                </div>
+            </div>
+
+            <div>
+                <p class="text-[10px] uppercase tracking-widest font-bold text-gray-500 mb-1">Actual Cost</p>
+                <div class="text-gray-300 font-mono text-xl font-bold">
+                    ₹<span id="buyRateDisplay">0</span><span class="text-sm font-normal text-gray-500">/kg</span>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <div class="space-y-4">
-        
-        <div class="bg-card p-6 rounded-3xl border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
-            <label class="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">Weight (Grams)</label>
-            <div class="flex items-baseline">
+    <div class="bg-[#0a0a0a] p-6 rounded-3xl border border-[#1f1f1f] mb-4 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+        <label class="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">Weight (Grams)</label>
+        <div class="flex items-baseline justify-between">
+            <div class="flex items-baseline flex-1">
                 <input type="number" id="weightInput" placeholder="0" inputmode="numeric"
                     class="w-full bg-transparent text-5xl font-bold text-white placeholder-gray-800 focus:outline-none font-mono">
                 <span class="text-gray-600 font-medium text-xl ml-2">g</span>
             </div>
-            
-            <div class="flex gap-2 mt-4 overflow-x-auto no-scrollbar">
-                <button onclick="setWeight(100)" class="flex-shrink-0 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-sm font-medium text-white transition-colors">100g</button>
-                <button onclick="setWeight(250)" class="flex-shrink-0 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-sm font-medium text-white transition-colors">250g</button>
-                <button onclick="setWeight(500)" class="flex-shrink-0 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-sm font-medium text-white transition-colors">500g</button>
-                <button onclick="setWeight(1000)" class="flex-shrink-0 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-sm font-medium text-white transition-colors">1kg</button>
-            </div>
         </div>
-
-        <div class="bg-card p-6 rounded-3xl border border-border focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all">
-            <label class="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">Price (Rupees)</label>
-            <div class="flex items-baseline">
-                <span class="text-secondary text-4xl font-bold mr-2">₹</span>
-                <input type="number" id="priceInput" placeholder="0" inputmode="numeric"
-                    class="w-full bg-transparent text-5xl font-bold text-secondary placeholder-gray-800 focus:outline-none font-mono">
-            </div>
+        
+        <div class="flex gap-2 mt-6 overflow-x-auto no-scrollbar">
+            <button onclick="setWeight(100)" class="flex-shrink-0 px-4 py-2 bg-[#151515] hover:bg-[#202020] rounded-xl text-sm font-medium text-gray-300 transition-colors border border-[#252525]">100g</button>
+            <button onclick="setWeight(250)" class="flex-shrink-0 px-4 py-2 bg-[#151515] hover:bg-[#202020] rounded-xl text-sm font-medium text-gray-300 transition-colors border border-[#252525]">250g</button>
+            <button onclick="setWeight(500)" class="flex-shrink-0 px-4 py-2 bg-[#151515] hover:bg-[#202020] rounded-xl text-sm font-medium text-gray-300 transition-colors border border-[#252525]">500g</button>
+            <button onclick="setWeight(1000)" class="flex-shrink-0 px-4 py-2 bg-[#151515] hover:bg-[#202020] rounded-xl text-sm font-medium text-gray-300 transition-colors border border-[#252525]">1kg</button>
         </div>
-
     </div>
+
+    <div class="bg-[#0a0a0a] p-6 rounded-3xl border border-[#1f1f1f] mb-4 focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all">
+        <label class="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">Selling Price</label>
+        <div class="flex items-baseline">
+            <span class="text-secondary text-4xl font-bold mr-2">₹</span>
+            <input type="number" id="priceInput" placeholder="0" inputmode="numeric"
+                class="w-full bg-transparent text-5xl font-bold text-secondary placeholder-gray-800 focus:outline-none font-mono">
+        </div>
+    </div>
+
+    <div id="breakdown" class="grid grid-cols-2 gap-4 animate-fade-in opacity-50 transition-opacity duration-300">
+        <div class="bg-[#0a0a0a] p-5 rounded-3xl border border-[#1f1f1f]">
+            <label class="block text-gray-600 text-[10px] font-bold uppercase tracking-widest mb-1">Item Cost</label>
+            <div class="text-2xl font-bold text-gray-400 font-mono">
+                ₹<span id="actualCostDisplay">0.00</span>
+            </div>
+        </div>
+
+        <div class="bg-[#0a0a0a] p-5 rounded-3xl border border-[#1f1f1f]">
+            <label class="block text-gray-600 text-[10px] font-bold uppercase tracking-widest mb-1">Net Profit</label>
+            <div class="text-2xl font-bold text-green-500 font-mono">
+                ₹<span id="profitDisplay">0.00</span>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -59,8 +99,13 @@
     const weightInput = document.getElementById('weightInput');
     const priceInput = document.getElementById('priceInput');
     const rateDisplay = document.getElementById('rateDisplay');
+    const buyRateDisplay = document.getElementById('buyRateDisplay');
+    const actualCostDisplay = document.getElementById('actualCostDisplay');
+    const profitDisplay = document.getElementById('profitDisplay');
+    const breakdown = document.getElementById('breakdown');
 
     let currentSellPrice = 0;
+    let currentBuyPrice = 0;
 
     // 1. Check URL for ID on load
     window.addEventListener('DOMContentLoaded', () => {
@@ -68,9 +113,7 @@
         const itemId = urlParams.get('id');
         if(itemId) {
             itemSelector.value = itemId;
-            // Trigger change event manually
             itemSelector.dispatchEvent(new Event('change'));
-            // Auto focus weight
             weightInput.focus();
         }
     });
@@ -79,33 +122,68 @@
     itemSelector.addEventListener('change', (e) => {
         const selectedOption = e.target.selectedOptions[0];
         currentSellPrice = parseFloat(selectedOption.getAttribute('data-sell')) || 0;
-        rateDisplay.textContent = currentSellPrice;
+        currentBuyPrice = parseFloat(selectedOption.getAttribute('data-buy')) || 0;
         
-        // Clear inputs when item changes
+        // Update the text displays
+        rateDisplay.textContent = currentSellPrice;
+        buyRateDisplay.textContent = currentBuyPrice;
+        
         if(weightInput.value) recalculateFromWeight();
     });
 
     // 3. Math Logic
     weightInput.addEventListener('input', recalculateFromWeight);
+    priceInput.addEventListener('input', recalculateFromPrice);
+
     function recalculateFromWeight() {
         const grams = parseFloat(weightInput.value);
         if (currentSellPrice > 0 && !isNaN(grams)) {
-            const price = (grams / 1000) * currentSellPrice;
-            priceInput.value = price.toFixed(2);
+            // Calculate Selling Price
+            const sellPrice = (grams / 1000) * currentSellPrice;
+            priceInput.value = sellPrice.toFixed(2);
+            
+            updateBreakdown(grams, sellPrice);
         } else {
-            priceInput.value = '';
+            clearBreakdown();
         }
     }
 
-    priceInput.addEventListener('input', () => {
+    function recalculateFromPrice() {
         const price = parseFloat(priceInput.value);
         if (currentSellPrice > 0 && !isNaN(price)) {
+            // Calculate Weight
             const grams = (price / currentSellPrice) * 1000;
             weightInput.value = grams.toFixed(0);
+            
+            updateBreakdown(grams, price);
         } else {
-            weightInput.value = '';
+            clearBreakdown();
         }
-    });
+    }
+
+    function updateBreakdown(grams, sellPrice) {
+        const costPrice = (grams / 1000) * currentBuyPrice;
+        const profit = sellPrice - costPrice;
+
+        actualCostDisplay.textContent = costPrice.toFixed(2);
+        profitDisplay.textContent = profit.toFixed(2);
+        
+        // Visual feedback
+        breakdown.classList.remove('opacity-50');
+        if(profit >= 0) {
+            profitDisplay.parentElement.classList.remove('text-red-500');
+            profitDisplay.parentElement.classList.add('text-green-500');
+        } else {
+            profitDisplay.parentElement.classList.remove('text-green-500');
+            profitDisplay.parentElement.classList.add('text-red-500');
+        }
+    }
+
+    function clearBreakdown() {
+        actualCostDisplay.textContent = "0.00";
+        profitDisplay.textContent = "0.00";
+        breakdown.classList.add('opacity-50');
+    }
 
     function setWeight(g) {
         if (currentSellPrice === 0) return;
