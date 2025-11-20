@@ -1,0 +1,72 @@
+<%- include('partials/_header', { title: 'Settings', user: user }) %>
+
+<div class="max-w-2xl mx-auto mt-8 animate-slide-up">
+    
+    <h1 class="text-4xl font-bold text-white mb-8 text-center md:text-left">Account Settings</h1>
+    
+    <div class="bg-[#0a0a0a] p-8 rounded-3xl border border-[#1f1f1f] shadow-2xl mb-8 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-40 h-40 bg-primary/5 blur-3xl rounded-full pointer-events-none"></div>
+
+        <div class="flex flex-col md:flex-row items-center gap-6 mb-8">
+            <div class="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-4xl font-bold text-white shadow-lg shadow-primary/20 ring-4 ring-[#0a0a0a]">
+                <%= user.name.charAt(0).toUpperCase() %>
+            </div>
+            <div class="text-center md:text-left">
+                <h2 class="text-3xl text-white font-bold"><%= user.name %></h2>
+                <p class="text-gray-500 font-medium"><%= user.email %></p>
+            </div>
+        </div>
+        
+        <div class="bg-black p-5 rounded-2xl border border-[#1f1f1f] flex justify-between items-center">
+            <span class="text-gray-500 text-sm font-bold uppercase tracking-widest">Member Since</span>
+            <span class="text-gray-300 font-mono"><%= new Date(user.createdAt).toLocaleDateString() %></span>
+        </div>
+    </div>
+
+    <div class="bg-[#0a0a0a] p-8 rounded-3xl border border-[#1f1f1f] shadow-2xl">
+        <div class="mb-6">
+            <h2 class="text-2xl text-white font-bold">Export Data</h2>
+            <p class="text-gray-500 text-sm mt-1">Download CSV files for Excel/Sheets.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4">
+            
+            <a href="/api/export/inventory" class="group bg-black hover:bg-[#151515] border border-[#1f1f1f] hover:border-gray-700 rounded-2xl p-5 flex items-center justify-between transition-all">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3.252a.75.75 0 100-1.5.75.75 0 000 1.5zm-3.25 3.252a.75.75 0 100-1.5.75.75 0 000 1.5z" />
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <span class="block text-white font-bold text-lg">Inventory</span>
+                        <span class="text-xs text-gray-500">Items list & prices</span>
+                    </div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-600 group-hover:text-white transition-colors">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+            </a>
+
+            <a href="/api/export/history" class="group bg-black hover:bg-[#151515] border border-[#1f1f1f] hover:border-gray-700 rounded-2xl p-5 flex items-center justify-between transition-all">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <span class="block text-white font-bold text-lg">Sales History</span>
+                        <span class="text-xs text-gray-500">Transactions log</span>
+                    </div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-600 group-hover:text-white transition-colors">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+<%- include('partials/_footer') %>

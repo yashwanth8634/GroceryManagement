@@ -1,0 +1,117 @@
+<%- include('partials/_header', { title: 'Calculator', user: user }) %>
+
+<div class="max-w-xl mx-auto animate-slide-up">
+    
+    <div class="bg-gradient-to-br from-gray-900 to-black p-6 rounded-3xl border border-border shadow-2xl mb-6 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl rounded-full pointer-events-none"></div>
+
+        <label class="block text-gray-500 text-sm font-medium mb-2 uppercase tracking-wider">Current Item</label>
+        
+        <select id="itemSelector" class="w-full bg-transparent text-3xl font-bold text-white focus:outline-none cursor-pointer appearance-none">
+            <option value="" data-sell="0">Select Item...</option>
+            <% items.forEach(item => { %>
+                <option 
+                    value="<%= item._id %>" 
+                    data-sell="<%= item.sellPricePerKg %>"
+                >
+                    <%= item.name %>
+                </option>
+            <% }) %>
+        </select>
+        
+        <div class="mt-2 flex items-center text-secondary font-mono">
+            <span>Rate: ₹</span><span id="rateDisplay">0</span><span>/kg</span>
+        </div>
+    </div>
+
+    <div class="space-y-4">
+        
+        <div class="bg-card p-6 rounded-3xl border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+            <label class="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">Weight (Grams)</label>
+            <div class="flex items-baseline">
+                <input type="number" id="weightInput" placeholder="0" inputmode="numeric"
+                    class="w-full bg-transparent text-5xl font-bold text-white placeholder-gray-800 focus:outline-none font-mono">
+                <span class="text-gray-600 font-medium text-xl ml-2">g</span>
+            </div>
+            
+            <div class="flex gap-2 mt-4 overflow-x-auto no-scrollbar">
+                <button onclick="setWeight(100)" class="flex-shrink-0 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-sm font-medium text-white transition-colors">100g</button>
+                <button onclick="setWeight(250)" class="flex-shrink-0 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-sm font-medium text-white transition-colors">250g</button>
+                <button onclick="setWeight(500)" class="flex-shrink-0 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-sm font-medium text-white transition-colors">500g</button>
+                <button onclick="setWeight(1000)" class="flex-shrink-0 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-sm font-medium text-white transition-colors">1kg</button>
+            </div>
+        </div>
+
+        <div class="bg-card p-6 rounded-3xl border border-border focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all">
+            <label class="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">Price (Rupees)</label>
+            <div class="flex items-baseline">
+                <span class="text-secondary text-4xl font-bold mr-2">₹</span>
+                <input type="number" id="priceInput" placeholder="0" inputmode="numeric"
+                    class="w-full bg-transparent text-5xl font-bold text-secondary placeholder-gray-800 focus:outline-none font-mono">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const itemSelector = document.getElementById('itemSelector');
+    const weightInput = document.getElementById('weightInput');
+    const priceInput = document.getElementById('priceInput');
+    const rateDisplay = document.getElementById('rateDisplay');
+
+    let currentSellPrice = 0;
+
+    // 1. Check URL for ID on load
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        if(itemId) {
+            itemSelector.value = itemId;
+            // Trigger change event manually
+            itemSelector.dispatchEvent(new Event('change'));
+            // Auto focus weight
+            weightInput.focus();
+        }
+    });
+
+    // 2. Handle Selection
+    itemSelector.addEventListener('change', (e) => {
+        const selectedOption = e.target.selectedOptions[0];
+        currentSellPrice = parseFloat(selectedOption.getAttribute('data-sell')) || 0;
+        rateDisplay.textContent = currentSellPrice;
+        
+        // Clear inputs when item changes
+        if(weightInput.value) recalculateFromWeight();
+    });
+
+    // 3. Math Logic
+    weightInput.addEventListener('input', recalculateFromWeight);
+    function recalculateFromWeight() {
+        const grams = parseFloat(weightInput.value);
+        if (currentSellPrice > 0 && !isNaN(grams)) {
+            const price = (grams / 1000) * currentSellPrice;
+            priceInput.value = price.toFixed(2);
+        } else {
+            priceInput.value = '';
+        }
+    }
+
+    priceInput.addEventListener('input', () => {
+        const price = parseFloat(priceInput.value);
+        if (currentSellPrice > 0 && !isNaN(price)) {
+            const grams = (price / currentSellPrice) * 1000;
+            weightInput.value = grams.toFixed(0);
+        } else {
+            weightInput.value = '';
+        }
+    });
+
+    function setWeight(g) {
+        if (currentSellPrice === 0) return;
+        weightInput.value = g;
+        recalculateFromWeight();
+    }
+</script>
+
+<%- include('partials/_footer') %>

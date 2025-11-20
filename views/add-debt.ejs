@@ -1,0 +1,53 @@
+<%- include('partials/_header', { title: 'Add Debt', user: user }) %>
+
+<div class="max-w-xl mx-auto mt-8 animate-slide-up">
+    
+    <div class="mb-8 text-center">
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-red-400 to-orange-500 bg-clip-text text-transparent inline-block">
+            Record Debt
+        </h1>
+        <p class="text-gray-500 mt-2">Log a new vendor payment.</p>
+    </div>
+
+    <form action="/debts" method="POST" class="space-y-6">
+        
+        <% if (typeof error != 'undefined' && error) { %>
+            <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-2xl text-center text-sm">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <div class="bg-[#0a0a0a] border border-[#1f1f1f] p-6 md:p-8 rounded-3xl shadow-2xl">
+
+            <div class="mb-6 group">
+                <label class="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-2 ml-1 group-focus-within:text-primary transition-colors">Vendor Name</label>
+                <input type="text" name="vendorName" required placeholder="e.g. Sai Traders"
+                    class="w-full bg-black border border-gray-800 text-white text-lg px-5 py-4 rounded-2xl focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
+            </div>
+
+            <div class="mb-6 group">
+                <label class="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-2 ml-1 group-focus-within:text-primary transition-colors">Amount Due (₹)</label>
+                <input type="number" name="amount" required placeholder="0.00"
+                    class="w-full bg-black border border-gray-800 text-white text-lg px-5 py-4 rounded-2xl focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all font-mono">
+            </div>
+
+            <div class="group">
+                <label class="block text-gray-500 text-xs font-bold uppercase tracking-widest mb-2 ml-1 group-focus-within:text-primary transition-colors">Notes</label>
+                <textarea name="notes" rows="3" placeholder="Additional details..."
+                    class="w-full bg-black border border-gray-800 text-white text-lg px-5 py-4 rounded-2xl focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"></textarea>
+            </div>
+        </div>
+
+        <div class="flex gap-3">
+            <a href="/debts" class="px-6 py-4 rounded-2xl border border-gray-800 text-gray-400 hover:text-white hover:bg-white/5 font-medium transition-colors">
+                Cancel
+            </a>
+            <button type="submit" class="flex-1 bg-white text-black py-4 rounded-2xl font-bold text-lg hover:bg-gray-200 transition-all transform hover:scale-[1.01] shadow-lg shadow-white/10">
+                Save Debt
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<%- include('partials/_footer') %>
