@@ -104,7 +104,7 @@ app.post('/history/delete/:id', protect, async (req, res) => {
 // Forms
 app.get('/items/add', protect, (req, res) => res.render('add-item', { user: req.user, error: null }));
 app.get('/debts/add', protect, (req, res) => res.render('add-debt', { user: req.user, error: null }));
-
+app.get('/api/health', (req, res) => res.status(200).send('I am Fine No Need to Worry'));
 
 // ==========================================
 //  ACTION ROUTES
